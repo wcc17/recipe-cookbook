@@ -5,7 +5,9 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import recipecookbook.models.*;
@@ -40,16 +42,17 @@ public class DatabaseService {
     /**
      * Can pass null or empty ingredients to not search by ingredients
      * Can pass null or empty category to not search by category
+     * If both are passed as null, this effectively becomes getAllRecipes()
      * @param ingredients
      * @param category
      * @return 
      */
-    public static List<Recipe> getRecipeByIngredientsAndCategory(List<Ingredient> ingredients, String category) {
+    public static Set<Recipe> getRecipeByIngredientsAndCategory(List<Ingredient> ingredients, String category) {
         Connection connection = DatabaseConnection.getConnection();
         OraclePreparedStatement preparedStatement = null;
         OracleResultSet resultSet = null;
         
-        List<Recipe> recipes = new ArrayList<>();
+        Set<Recipe> recipes = new HashSet<>();
         try {
             String sqlStatement = buildRecipeQueryString(ingredients, category);
             preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
@@ -95,9 +98,15 @@ public class DatabaseService {
 
             }
             sqlStatementBuilder.append(")");
+            if(category != null && !category.isEmpty()) {
+               sqlStatementBuilder.append(" and"); 
+            }
+        } else if(category != null && !category.isEmpty()) {
+            sqlStatementBuilder.append(" where");
         }
+        
         if(category != null && !category.isEmpty()) {
-            sqlStatementBuilder.append(" and Recipe.category = ");
+            sqlStatementBuilder.append(" Recipe.category = ");
             sqlStatementBuilder.append("'");
             sqlStatementBuilder.append(category);
             sqlStatementBuilder.append("'");

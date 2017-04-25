@@ -7,6 +7,7 @@ package recipecookbook;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import recipecookbook.models.*;
 
 public class RecipeCookBook {
@@ -36,7 +37,7 @@ public class RecipeCookBook {
         ingredients.add(ingredient2);
         ingredients.add(ingredient3);
         String category = "Pasta";
-        List<Recipe> recipes = DatabaseService.getRecipeByIngredientsAndCategory(ingredients, category);
+        Set<Recipe> recipes = DatabaseService.getRecipeByIngredientsAndCategory(ingredients, category);
         for(Recipe recipe : recipes) {
             System.out.println(recipe);
         }
