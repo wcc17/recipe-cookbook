@@ -9,8 +9,32 @@ import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DatabaseConnection {
+    
+    private static Connection connection = null;
+    
+    public static Connection getConnection() {
+        //if connection doesn't exist yet
+        if(connection == null) {
+            return setupConnection();
+        }
+        
+        //if connection has been closed
+        try {
+            if(connection.isClosed()) {
+                return setupConnection();
+            }
+        } catch (SQLException e) {
+            //JOptionPane.showMessageDialog(null, e);
+            System.out.println("Error connectiong");
+            System.out.println(e);
+            return null;        
+        }
+        
+        return connection;
+    }
     public static Connection setupConnection()
     {
         String jdbcDriver = "oracle.jdbc.driver.OracleDriver";
@@ -25,8 +49,8 @@ public class DatabaseConnection {
             Class.forName(jdbcDriver);
             
             // Connect to the Oracle database
-            Connection conn = DriverManager.getConnection(jdbcUrl, username, password);
-            return conn;
+            connection = DriverManager.getConnection(jdbcUrl, username, password);
+            return connection;
         }
         catch (Exception e)
         {
@@ -37,13 +61,13 @@ public class DatabaseConnection {
         }
     }
     
-    static void close(Connection conn) 
+    static void closeConnection() 
     {
-        if(conn != null) 
+        if(connection != null) 
         {
             try
             {
-                conn.close();
+                connection.close();
             }
             catch(Throwable whatever)
             {}

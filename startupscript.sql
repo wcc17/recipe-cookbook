@@ -71,9 +71,9 @@ insert into Ingredient values('Noodles', 'N', 20, 20, 1, 2, 5);
 insert into Ingredient values('Lettuce', 'N', 5, 5, 0, 0, 5);
 insert into Ingredient values('Dressing', 'Y', 15, 15, 0, 15, 5);
 
-insert into Meal(name, mealType, dayOfWeek, weekStart) values('Pizza with salad', 'Dinner', 'Monday', SYSDATE);
-insert into Meal(name, mealType, dayOfWeek, weekStart) values('Spaghetti with salad', 'Lunch', 'Tuesday', SYSDATE);
-insert into Meal(name, mealType, dayOfWeek, weekStart) values('Just salad', 'Dinner', 'Wednesday', SYSDATE);
+insert into Meal(name, mealType, dayOfWeek, weekStart) values('Pizza with salad', 'dinner', 'monday', to_date('04/23/2017', 'MM/DD/YYYY'));
+insert into Meal(name, mealType, dayOfWeek, weekStart) values('Spaghetti with salad', 'lunch', 'tuesday', to_date('04/23/2017', 'MM/DD/YYYY'));
+insert into Meal(name, mealType, dayOfWeek, weekStart) values('Just salad', 'dinner', 'wednesday', to_date('04/23/2017', 'MM/DD/YYYY'));
 
 insert into RecipeIngredient values('Pizza', 'Pepperoni');
 insert into RecipeIngredient values('Pizza', 'Marinara');
