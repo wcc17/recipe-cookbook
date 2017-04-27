@@ -36,6 +36,18 @@ public class IngredientService {
     }
     
     public static List<Ingredient> getIngredientByRecipe() {
+        Connection connection = DatabaseConnection.getConnection();
+        OraclePreparedStatement preparedStatement = null;
+        OracleResultSet resultSet = null;
+        
+        List<Ingredient> ingredients = new ArrayList<>();
+//        try {
+//            StringBuilder sqlStatementBuilder = new StringBuilder();
+//            sqlStatementBuilder.append("select * from Ingredient");
+//            sqlStatementBuilder.append("inner join RecipeIngredient on Ingredient.name = RecipeIngredient.ingredientName");
+//            sqlStatementBuilder.append("where Recipe.name = ?");
+//            String sqlStatement = sqlStatementBuilder.toString();
+        
         return null;
     }
     
