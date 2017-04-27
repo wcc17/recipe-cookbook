@@ -5,6 +5,7 @@
  */
 package recipecookbook;
 
+import recipecookbook.services.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,13 +16,13 @@ public class RecipeCookBook {
     public static void main(String[] args) {
         //how to get meals by weekStart
 //        LocalDate weekStart = LocalDate.of(2017, 4, 23);
-//        List<Meal> meals = DatabaseService.getAllMealsFromWeek(weekStart);
+//        List<Meal> meals = MealService.getAllMealsFromWeek(weekStart);
 //        for(Meal meal : meals) {
 //            System.out.println(meal);
 //        }
 
         //how to get all recipes
-//        List<Recipe> recipes = DatabaseService.getAllRecipes();
+//        List<Recipe> recipes = RecipeService.getAllRecipes();
 //        for(Recipe recipe : recipes) {
 //            System.out.println(recipe);
 //        }
@@ -37,7 +38,7 @@ public class RecipeCookBook {
         ingredients.add(ingredient2);
         ingredients.add(ingredient3);
         String category = "Pasta";
-        Set<Recipe> recipes = DatabaseService.getRecipeByIngredientsAndCategory(ingredients, category);
+        Set<Recipe> recipes = RecipeService.getRecipeByIngredientsAndCategory(ingredients, category);
         for(Recipe recipe : recipes) {
             System.out.println(recipe);
         }

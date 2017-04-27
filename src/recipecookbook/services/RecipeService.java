@@ -1,20 +1,19 @@
-package recipecookbook;
+package recipecookbook.services;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
-import recipecookbook.models.*;
+import recipecookbook.DatabaseConnection;
+import recipecookbook.models.Ingredient;
+import recipecookbook.models.Recipe;
 
-public class DatabaseService {
+public class RecipeService {
     
-    //TODO: RECIPE QUERIES NEED TO BE SPLIT OFF INTO THEIR OWN SERVICE
     public static List<Recipe> getAllRecipes() {
         Connection connection = DatabaseConnection.getConnection();
         OraclePreparedStatement preparedStatement = null;
@@ -68,6 +67,9 @@ public class DatabaseService {
             System.out.println("Error executing query");
             System.out.println(e);
         }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
         
         return recipes;
     }
@@ -123,37 +125,4 @@ public class DatabaseService {
         return recipe;
     }
     
-    public static List<Meal> getAllMealsFromWeek(LocalDate weekStart) {
-        Connection connection = DatabaseConnection.getConnection();
-        OraclePreparedStatement preparedStatement = null;
-        OracleResultSet resultSet = null;
-       
-        Date sqlDate = Date.valueOf(weekStart);
-        List<Meal> meals = new ArrayList<>();
-        try {
-            String sqlStatement = "select * from Meal where trunc(weekStart)=to_date(?, 'yyyy-mm-dd')";
-            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
-            preparedStatement.setString(1, sqlDate.toString());
-            resultSet = (OracleResultSet) preparedStatement.executeQuery();
-
-            while(resultSet.next()) {
-                Meal meal = new Meal();
-                meal.setId(resultSet.getInt(("id")));
-                meal.setName(resultSet.getString("name"));
-                meal.setMealType(resultSet.getString("mealType"));
-                meal.setDayOfWeek(resultSet.getString("dayOfWeek"));
-                meal.setWeekStart(resultSet.getDate("weekStart"));
-                meals.add(meal);
-            }
-        } catch (SQLException e) {
-//              JOptionPane.showMessageDialog(null, e);
-            System.out.println("Error executing query");
-            System.out.println(e);
-        }
-        
-        DatabaseConnection.close(preparedStatement);
-        DatabaseConnection.close(resultSet);
-        
-        return meals;
-    }
 }

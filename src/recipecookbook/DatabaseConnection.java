@@ -35,6 +35,7 @@ public class DatabaseConnection {
         
         return connection;
     }
+    
     public static Connection setupConnection()
     {
         String jdbcDriver = "oracle.jdbc.driver.OracleDriver";
@@ -61,7 +62,7 @@ public class DatabaseConnection {
         }
     }
     
-    static void closeConnection() 
+    public static void closeConnection() 
     {
         if(connection != null) 
         {
@@ -74,7 +75,7 @@ public class DatabaseConnection {
         }
     }
 
-    static void close(OraclePreparedStatement st)
+    public static void close(OraclePreparedStatement st)
     {
         if(st != null)
         {
@@ -87,7 +88,7 @@ public class DatabaseConnection {
         }
     }
 
-    static void close(OracleResultSet rs)
+    public static void close(OracleResultSet rs)
     {
         if(rs != null)
         {
