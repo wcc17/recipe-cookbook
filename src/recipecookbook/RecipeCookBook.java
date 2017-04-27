@@ -27,20 +27,25 @@ public class RecipeCookBook {
 //            System.out.println(recipe);
 //        }
         
-        Ingredient ingredient1 = new Ingredient();
-        Ingredient ingredient2 = new Ingredient();
-        Ingredient ingredient3 = new Ingredient();
-        ingredient1.setName("Pepperoni");
-        ingredient2.setName("Lettuce");
-        ingredient3.setName("Marinara");
-        List<Ingredient> ingredients = new ArrayList<>();
-        ingredients.add(ingredient1);
-        ingredients.add(ingredient2);
-        ingredients.add(ingredient3);
-        String category = "Pasta";
-        Set<Recipe> recipes = RecipeService.getRecipeByIngredientsAndCategory(ingredients, category);
-        for(Recipe recipe : recipes) {
-            System.out.println(recipe);
+//        Ingredient ingredient1 = new Ingredient();
+//        Ingredient ingredient2 = new Ingredient();
+//        Ingredient ingredient3 = new Ingredient();
+//        ingredient1.setName("Pepperoni");
+//        ingredient2.setName("Lettuce");
+//        ingredient3.setName("Marinara");
+//        List<Ingredient> ingredients = new ArrayList<>();
+//        ingredients.add(ingredient1);
+//        ingredients.add(ingredient2);
+//        ingredients.add(ingredient3);
+//        String category = "Pasta";
+//        Set<Recipe> recipes = RecipeService.getRecipeByIngredientsAndCategory(ingredients, category);
+//        for(Recipe recipe : recipes) {
+//            System.out.println(recipe);
+//        }
+
+        List<Ingredient> ingredients = IngredientService.getAllIngredients();
+        for(Ingredient ingredient : ingredients) {
+            System.out.println(ingredient);
         }
 
         DatabaseConnection.closeConnection();
