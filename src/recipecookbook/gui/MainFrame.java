@@ -33,45 +33,56 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        Recipe = new javax.swing.JButton();
+        Fridge = new javax.swing.JButton();
+        weeklyMeal = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Recipe.setText("Recipe");
+        Recipe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                RecipeActionPerformed(evt);
             }
         });
 
-        jButton2.setText("jButton2");
+        Fridge.setText("Fridge");
+        Fridge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FridgeActionPerformed(evt);
+            }
+        });
+
+        weeklyMeal.setText("Weekly Meal");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(145, 145, 145)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
-                .addContainerGap(158, Short.MAX_VALUE))
+                .addGap(122, 122, 122)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Recipe, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Fridge, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(weeklyMeal, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(146, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addComponent(jButton1)
-                .addGap(57, 57, 57)
-                .addComponent(jButton2)
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE)
+                .addComponent(Recipe, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(70, 70, 70)
+                .addComponent(Fridge, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(75, 75, 75)
+                .addComponent(weeklyMeal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(83, 83, 83))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void RecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipeActionPerformed
        LocalDate weekStart = LocalDate.of(2017, 4, 23);
         List<Meal> meals = MealService.getAllMealsFromWeek(weekStart);
         for(Meal meal : meals) {
@@ -79,7 +90,11 @@ public class MainFrame extends javax.swing.JFrame {
         }
         
         DatabaseConnection.closeConnection();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_RecipeActionPerformed
+
+    private void FridgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FridgeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FridgeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -117,7 +132,8 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton Fridge;
+    private javax.swing.JButton Recipe;
+    private javax.swing.JButton weeklyMeal;
     // End of variables declaration//GEN-END:variables
 }
