@@ -5,7 +5,11 @@
  */
 package recipecookbook;
 
+import java.util.Set;
 import recipecookbook.gui.MainFrame;
+import recipecookbook.models.Ingredient;
+import recipecookbook.models.Recipe;
+import recipecookbook.services.IngredientService;
 
 public class RecipeCookBook {
 
@@ -45,6 +49,13 @@ public class RecipeCookBook {
 //        }
 //
 //        DatabaseConnection.closeConnection();
+
+//        Recipe recipe = new Recipe();
+//        recipe.setName("Pizza");
+//        Set<Ingredient> ingredients = IngredientService.getIngredientByRecipe(recipe);
+//        for(Ingredient ingredient : ingredients) {
+//            System.out.println(ingredient);
+//        }
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

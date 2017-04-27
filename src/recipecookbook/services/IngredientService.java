@@ -3,11 +3,14 @@ package recipecookbook.services;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import recipecookbook.DatabaseConnection;
 import recipecookbook.models.Ingredient;
+import recipecookbook.models.Recipe;
 
 public class IngredientService {
     
@@ -35,20 +38,34 @@ public class IngredientService {
         return ingredients;
     }
     
-    public static List<Ingredient> getIngredientByRecipe() {
+    public static Set<Ingredient> getIngredientByRecipe(Recipe recipe) {
         Connection connection = DatabaseConnection.getConnection();
         OraclePreparedStatement preparedStatement = null;
         OracleResultSet resultSet = null;
         
-        List<Ingredient> ingredients = new ArrayList<>();
-//        try {
-//            StringBuilder sqlStatementBuilder = new StringBuilder();
-//            sqlStatementBuilder.append("select * from Ingredient");
-//            sqlStatementBuilder.append("inner join RecipeIngredient on Ingredient.name = RecipeIngredient.ingredientName");
-//            sqlStatementBuilder.append("where Recipe.name = ?");
-//            String sqlStatement = sqlStatementBuilder.toString();
+        Set<Ingredient> ingredients = new HashSet<>();
+        try {
+            StringBuilder sqlStatementBuilder = new StringBuilder();
+            sqlStatementBuilder.append("select * from Ingredient");
+            sqlStatementBuilder.append(" inner join RecipeIngredient on Ingredient.name = RecipeIngredient.ingredientName");
+            sqlStatementBuilder.append(" where RecipeIngredient.recipeName = ?");
+            String sqlStatement = sqlStatementBuilder.toString();
+            
+            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, recipe.getName());
+            resultSet = (OracleResultSet) preparedStatement.executeQuery();
+            
+            while(resultSet.next()) {
+                Ingredient ingredient = getIngredientFromResultSet(resultSet);
+                ingredients.add(ingredient);
+            }
+        } catch (SQLException e) {
+            //              JOptionPane.showMessageDialog(null, e);
+            System.out.println("Error executing query");
+            System.out.println(e.getMessage());
+        }
         
-        return null;
+        return ingredients;
     }
     
     private static Ingredient getIngredientFromResultSet(OracleResultSet resultSet) throws SQLException {
