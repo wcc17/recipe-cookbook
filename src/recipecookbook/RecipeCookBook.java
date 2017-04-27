@@ -5,11 +5,10 @@
  */
 package recipecookbook;
 
-import java.util.Set;
-import recipecookbook.gui.MainFrame;
-import recipecookbook.models.Ingredient;
-import recipecookbook.models.Recipe;
-import recipecookbook.services.IngredientService;
+import java.sql.Date;
+import java.time.LocalDate;
+import recipecookbook.models.Meal;
+import recipecookbook.services.MealService;
 
 public class RecipeCookBook {
 
@@ -57,12 +56,31 @@ public class RecipeCookBook {
 //            System.out.println(ingredient);
 //        }
 
+//        Ingredient ingredient = new Ingredient();
+//        ingredient.setName("Tomato");
+//        ingredient.setCalories(5);
+//        ingredient.setFat(5);
+//        ingredient.setProtein(0);
+//        ingredient.setSodium(0);
+//        ingredient.setSugar(0);
+//        ingredient.setInFridge(true);
+//        IngredientService.createNewIngredient(ingredient);
+
+        LocalDate weekStart = LocalDate.of(2017, 4, 23);
+        Date sqlDate = Date.valueOf(weekStart);
+        Meal meal = new Meal();
+        meal.setName("Chicken");
+        meal.setDayOfWeek("monday");
+        meal.setMealType("dinner");
+        meal.setWeekStart(sqlDate);
+        MealService.createNewMeal(meal);
+
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrame().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new MainFrame().setVisible(true);
+//            }
+//        });
     }
     
 }

@@ -14,6 +14,37 @@ import recipecookbook.models.Recipe;
 
 public class IngredientService {
     
+    public static void createNewIngredient(Ingredient ingredient) {
+        Connection connection = DatabaseConnection.getConnection();
+        OraclePreparedStatement preparedStatement = null;
+        OracleResultSet resultSet = null;
+        
+        try {
+            String sqlStatement = "insert into Ingredient(name, inFridge, calories, fat, protein, sugar, sodium) values (?,?,?,?,?,?,?)";
+            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, ingredient.getName());
+            
+            String yesNo = "N";
+            if(ingredient.isInFridge()) {
+                yesNo = "Y";
+            }
+            preparedStatement.setString(2, yesNo);
+            
+            preparedStatement.setInt(3, ingredient.getCalories());
+            preparedStatement.setInt(4, ingredient.getFat());
+            preparedStatement.setInt(5, ingredient.getProtein());
+            preparedStatement.setInt(6, ingredient.getSugar());
+            preparedStatement.setInt(7, ingredient.getSodium());
+            
+            resultSet = (OracleResultSet) preparedStatement.executeQuery();
+            System.out.println("Ingredient: " + ingredient.getName() + " created");
+        } catch (SQLException e) {
+            //              JOptionPane.showMessageDialog(null, e);
+            System.out.println("Error executing query");
+            System.out.println(e);
+        }
+    }
+    
     public static List<Ingredient> getAllIngredients() {
         Connection connection = DatabaseConnection.getConnection();
         OraclePreparedStatement preparedStatement = null;
