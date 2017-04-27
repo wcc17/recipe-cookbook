@@ -5,11 +5,7 @@
  */
 package recipecookbook;
 
-import recipecookbook.services.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import recipecookbook.models.*;
+import recipecookbook.gui.MainFrame;
 
 public class RecipeCookBook {
 
@@ -43,12 +39,19 @@ public class RecipeCookBook {
 //            System.out.println(recipe);
 //        }
 
-        List<Ingredient> ingredients = IngredientService.getAllIngredients();
-        for(Ingredient ingredient : ingredients) {
-            System.out.println(ingredient);
-        }
+//        List<Ingredient> ingredients = IngredientService.getAllIngredients();
+//        for(Ingredient ingredient : ingredients) {
+//            System.out.println(ingredient);
+//        }
+//
+//        DatabaseConnection.closeConnection();
 
-        DatabaseConnection.closeConnection();
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainFrame().setVisible(true);
+            }
+        });
     }
     
 }
