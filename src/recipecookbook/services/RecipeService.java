@@ -42,7 +42,7 @@ public class RecipeService {
         }
     }
     
-    public static List<String> getRecipeIngredientQuery(Recipe recipe, List<Ingredient> ingredients) {
+    private static List<String> getRecipeIngredientQuery(Recipe recipe, List<Ingredient> ingredients) {
         StringBuilder sqlStatementBuilder = new StringBuilder();
         List<String> sqlStatements = new ArrayList<>();
         //recipeName and ingredientName
