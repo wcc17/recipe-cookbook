@@ -5,13 +5,7 @@
  */
 package recipecookbook;
 
-import java.time.LocalDate;
-import java.util.List;
-import recipecookbook.models.Constants;
-import recipecookbook.models.Meal;
-import recipecookbook.models.Recipe;
-import recipecookbook.services.MealService;
-import recipecookbook.services.RecipeService;
+import recipecookbook.gui.MainFrame;
 
 public class RecipeCookBook {
 
@@ -93,19 +87,19 @@ public class RecipeCookBook {
 //          toastIngredients.add(ingredients.get(6));
 //          RecipeService.addIngredientsToRecipe(recipe, toastIngredients);
 
-          List<Meal> meals = MealService.getAllMealsFromWeek(LocalDate.of(2017, 4, 23));
-          List<Recipe> recipes = RecipeService.getAllRecipes();
-          Meal meal = meals.get(5);
-          Recipe recipe = recipes.get(3);
-          meal.setDayOfWeek(Constants.WEDNESDAY);
-          MealService.addRecipeToMeal(recipe, meal);
+//          List<Meal> meals = MealService.getAllMealsFromWeek(LocalDate.of(2017, 4, 23));
+//          List<Recipe> recipes = RecipeService.getAllRecipes();
+//          Meal meal = meals.get(5);
+//          Recipe recipe = recipes.get(3);
+//          meal.setDayOfWeek(Constants.WEDNESDAY);
+//          MealService.addRecipeToMeal(recipe, meal);
 
         /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new MainFrame().setVisible(true);
-//            }
-//        });
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainFrame().setVisible(true);
+            }
+        });
     }
     
 }

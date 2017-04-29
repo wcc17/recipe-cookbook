@@ -5,17 +5,62 @@
  */
 package recipecookbook.gui;
 
+import java.util.List;
+import java.util.Set;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import recipecookbook.models.Ingredient;
+import recipecookbook.models.Recipe;
+import recipecookbook.services.IngredientService;
+import recipecookbook.services.RecipeService;
+
 /**
  *
  * @author Ryan
  */
-public class Recipes extends javax.swing.JFrame {
+public class RecipeFrame extends javax.swing.JFrame {
+    
+    DefaultListModel recipeListModel;
+    DefaultComboBoxModel ingredientComboBoxModel;
 
     /**
      * Creates new form Recipes
      */
-    public Recipes() {
+    public RecipeFrame() {
         initComponents();
+        
+        //TODO: can we run this after the window is loaded?
+        loadRecipes(); 
+        loadIngredients();
+    }
+    
+    public void loadRecipes() {
+        List<Recipe> recipes = RecipeService.getAllRecipes();
+//        DefaultListModel listModel=new DefaultListModel();
+//        for (int i=0; i<data.length; i++) {
+//          listModel.addElement(data[i]);
+//        }
+//        list=new JList(listModel);
+//        Then you can simply make changes via the list model e.g.
+//
+//        listModel.addElement("New item");
+//        listModel.removeElementAt(1); // remove the element at position 1
+        recipeListModel = new DefaultListModel();
+        for(Recipe recipe : recipes) {
+            recipeListModel.addElement(recipe);
+        }
+        recipeJList.setModel(recipeListModel);
+    }
+    
+    public void loadIngredients() {
+        List<Ingredient> ingredients = IngredientService.getAllIngredients();
+        
+        ingredientComboBoxModel = new DefaultComboBoxModel<Ingredient>();
+        for(Ingredient ingredient : ingredients) {
+            ingredientComboBoxModel.addElement(ingredient);
+        }
+        
+        ingredientComboBox.setModel(ingredientComboBoxModel);
     }
 
     /**
@@ -29,14 +74,14 @@ public class Recipes extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        recipeJList = new javax.swing.JList<>();
         jLabel2 = new javax.swing.JLabel();
         Category = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        ingredientTextArea = new javax.swing.JTextArea();
         searchRecipe = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        ingredientComboBox = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -47,12 +92,12 @@ public class Recipes extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Recipes");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        recipeJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                recipeJListValueChanged(evt);
+            }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(recipeJList);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("Category:");
@@ -63,13 +108,11 @@ public class Recipes extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel3.setText("Ingredients");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        ingredientTextArea.setColumns(20);
+        ingredientTextArea.setRows(5);
+        jScrollPane2.setViewportView(ingredientTextArea);
 
         searchRecipe.setText("Search");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -89,7 +132,7 @@ public class Recipes extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ingredientComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -131,7 +174,7 @@ public class Recipes extends javax.swing.JFrame {
                         .addGap(1, 1, 1)
                         .addComponent(jLabel4)
                         .addGap(3, 3, 3)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ingredientComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(9, 9, 9)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -144,54 +187,32 @@ public class Recipes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Recipes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Recipes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Recipes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Recipes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void recipeJListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_recipeJListValueChanged
+        Recipe recipe = recipeJList.getSelectedValue();
+        Set<Ingredient> ingredients = IngredientService.getIngredientByRecipe(recipe);
+        
+        StringBuilder ingredientTextBuilder = new StringBuilder();
+        for(Ingredient ingredient : ingredients) {
+            ingredientTextBuilder.append(ingredient.toString());
+            ingredientTextBuilder.append("\n");
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Recipes().setVisible(true);
-            }
-        });
-    }
+        
+        ingredientTextArea.setText(ingredientTextBuilder.toString());
+    }//GEN-LAST:event_recipeJListValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Category;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<Ingredient> ingredientComboBox;
+    private javax.swing.JTextArea ingredientTextArea;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JList<Recipe> recipeJList;
     private javax.swing.JButton searchRecipe;
     // End of variables declaration//GEN-END:variables
 }

@@ -73,6 +73,11 @@ public class Ingredient {
     public void setSodium(Integer sodium) {
         this.sodium = sodium;
     }
+    
+    @Override
+    public String toString() {
+        return this.name; //TODO: needs to say more than just the name of the ingredient
+    }
 
     @Override
     public int hashCode() {

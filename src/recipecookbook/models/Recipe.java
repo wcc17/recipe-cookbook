@@ -36,7 +36,7 @@ public class Recipe {
     
     @Override
     public String toString() {
-        return "Recipe: " + this.name + " Category: " + this.category;
+        return this.name;
     }
 
     @Override
