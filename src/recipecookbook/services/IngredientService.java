@@ -9,6 +9,7 @@ import java.util.Set;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import recipecookbook.DatabaseConnection;
+import recipecookbook.models.Constants;
 import recipecookbook.models.Ingredient;
 import recipecookbook.models.Recipe;
 
@@ -24,9 +25,9 @@ public class IngredientService {
             preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, ingredient.getName());
             
-            String yesNo = "N";
+            String yesNo = Constants.NO;
             if(ingredient.isInFridge()) {
-                yesNo = "Y";
+                yesNo = Constants.YES;
             }
             preparedStatement.setString(2, yesNo);
             

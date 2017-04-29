@@ -1,7 +1,9 @@
 package recipecookbook.services;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +15,72 @@ import recipecookbook.models.Ingredient;
 import recipecookbook.models.Recipe;
 
 public class RecipeService {
+    
+    public static void addIngredientsToRecipe(Recipe recipe, List<Ingredient> ingredients) {
+        Connection connection = DatabaseConnection.getConnection();
+              
+        try {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            List<String> sqlStatements = getRecipeIngredientQuery(recipe, ingredients);
+            
+            connection.setAutoCommit(false);
+            
+            for(String sqlStatement : sqlStatements) {
+                statement.addBatch(sqlStatement);
+            }
+            
+            statement.executeBatch();
+            connection.commit();
+            
+            for(Ingredient ingredient : ingredients) {
+                System.out.println("Ingredient " + ingredient.getName() + " added to Recipe " + recipe.getName());
+            }
+        } catch (SQLException e) {
+            //              JOptionPane.showMessageDialog(null, e);
+            System.out.println("Error executing query");
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public static List<String> getRecipeIngredientQuery(Recipe recipe, List<Ingredient> ingredients) {
+        StringBuilder sqlStatementBuilder = new StringBuilder();
+        List<String> sqlStatements = new ArrayList<>();
+        //recipeName and ingredientName
+        for(Ingredient ingredient : ingredients) {
+            sqlStatementBuilder.append("insert into RecipeIngredient(recipeName, ingredientName) values('");
+            sqlStatementBuilder.append(recipe.getName());
+            sqlStatementBuilder.append("', '");
+            sqlStatementBuilder.append(ingredient.getName());
+            sqlStatementBuilder.append("')");
+            
+            sqlStatements.add(sqlStatementBuilder.toString());
+            System.out.println(sqlStatementBuilder.toString());
+            sqlStatementBuilder = new StringBuilder();
+        }
+        
+        return sqlStatements;
+    }
+    
+    public static void createNewRecipe(Recipe recipe) {
+        Connection connection = DatabaseConnection.getConnection();
+        OraclePreparedStatement preparedStatement = null;
+        OracleResultSet resultSet = null;
+        
+        try {
+            String sqlStatement = "insert into Recipe(name, instructions, category) values (?,?,?)";
+            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, recipe.getName());
+            preparedStatement.setString(2, recipe.getInstructions());
+            preparedStatement.setString(3, recipe.getCategory());
+            
+            resultSet = (OracleResultSet) preparedStatement.executeQuery();
+            System.out.println("Recipe " + recipe.getName() + " created");
+        } catch (SQLException e) {
+            //              JOptionPane.showMessageDialog(null, e);
+            System.out.println("Error executing query");
+            System.out.println(e);
+        }
+    }
     
     public static List<Recipe> getAllRecipes() {
         Connection connection = DatabaseConnection.getConnection();

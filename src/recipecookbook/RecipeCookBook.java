@@ -5,10 +5,13 @@
  */
 package recipecookbook;
 
-import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
+import recipecookbook.models.Constants;
 import recipecookbook.models.Meal;
+import recipecookbook.models.Recipe;
 import recipecookbook.services.MealService;
+import recipecookbook.services.RecipeService;
 
 public class RecipeCookBook {
 
@@ -66,14 +69,36 @@ public class RecipeCookBook {
 //        ingredient.setInFridge(true);
 //        IngredientService.createNewIngredient(ingredient);
 
-        LocalDate weekStart = LocalDate.of(2017, 4, 23);
-        Date sqlDate = Date.valueOf(weekStart);
-        Meal meal = new Meal();
-        meal.setName("Chicken");
-        meal.setDayOfWeek("monday");
-        meal.setMealType("dinner");
-        meal.setWeekStart(sqlDate);
-        MealService.createNewMeal(meal);
+//        LocalDate weekStart = LocalDate.of(2017, 4, 23);
+//        Date sqlDate = Date.valueOf(weekStart);
+//        Meal meal = new Meal();
+//        meal.setName("Chicken");
+//        meal.setDayOfWeek("monday");
+//        meal.setMealType("dinner");
+//        meal.setWeekStart(sqlDate);
+//        MealService.createNewMeal(meal);
+
+//        Recipe recipe = new Recipe();
+//        recipe.setName("Toast");
+//        recipe.setInstructions("1. Get some bread\n2. Make some toast");
+//        recipe.setCategory("Bread");
+//        RecipeService.createNewRecipe(recipe);
+
+           
+//          List<Ingredient> ingredients = IngredientService.getAllIngredients();
+//          List<Recipe> recipes = RecipeService.getAllRecipes();
+//          Recipe recipe = recipes.get(3); // should be toast
+//          List<Ingredient> toastIngredients = new ArrayList<>();
+//          toastIngredients.add(ingredients.get(5));
+//          toastIngredients.add(ingredients.get(6));
+//          RecipeService.addIngredientsToRecipe(recipe, toastIngredients);
+
+          List<Meal> meals = MealService.getAllMealsFromWeek(LocalDate.of(2017, 4, 23));
+          List<Recipe> recipes = RecipeService.getAllRecipes();
+          Meal meal = meals.get(5);
+          Recipe recipe = recipes.get(3);
+          meal.setDayOfWeek(Constants.WEDNESDAY);
+          MealService.addRecipeToMeal(recipe, meal);
 
         /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {

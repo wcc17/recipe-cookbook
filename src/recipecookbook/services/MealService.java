@@ -13,6 +13,26 @@ import recipecookbook.models.*;
 
 public class MealService {
     
+    public static void addRecipeToMeal(Recipe recipe, Meal meal) {
+        Connection connection = DatabaseConnection.getConnection();
+        OraclePreparedStatement preparedStatement = null;
+        OracleResultSet resultSet = null;
+        
+        try {
+            String sqlStatement = "insert into RecipeMeal(recipeName, mealId) values(?,?)";
+            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, recipe.getName());
+            preparedStatement.setInt(2, meal.getId());
+            
+            resultSet = (OracleResultSet) preparedStatement.executeQuery();
+            System.out.println("Recipe: " + recipe.getName() + " added to Meal: " + meal.getId() + " on day: " + meal.getDayOfWeek());
+        } catch (SQLException e) {
+            //              JOptionPane.showMessageDialog(null, e);
+            System.out.println("Error executing query");
+            System.out.println(e);
+        }
+    }
+    
     public static void createNewMeal(Meal meal) {
         Connection connection = DatabaseConnection.getConnection();
         OraclePreparedStatement preparedStatement = null;
