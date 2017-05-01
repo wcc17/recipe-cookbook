@@ -31,7 +31,7 @@ public class RecipeFrame extends javax.swing.JFrame {
     public RecipeFrame() {
         initComponents();
         
-        //TODO: can we run this after the window is loaded?
+        //TODO: can we run this after the window is completely loaded?
         List<Recipe> recipes = RecipeService.getAllRecipes();
         loadRecipesAndCategories(recipes, true); 
         loadIngredients();
@@ -73,10 +73,6 @@ public class RecipeFrame extends javax.swing.JFrame {
         }
         
         ingredientJList.setModel(ingredientListModel);
-    }
-    
-    public void loadRecipesFromSearch() {
-//        List<Recipe> recipes = RecipeService.getRecipeByIngredientsAndCategory(ingredients, category);
     }
 
     /**
