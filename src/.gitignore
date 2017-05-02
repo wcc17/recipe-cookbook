@@ -14,7 +14,3 @@ hs_err_pid*
 nbproject/**
 build/**
 .DS_Store
-
-nbproject/private/private.properties
-
-nbproject/project.properties

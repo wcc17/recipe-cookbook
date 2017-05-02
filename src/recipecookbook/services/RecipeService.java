@@ -83,13 +83,18 @@ public class RecipeService {
     }
     
     public static List<Recipe> getAllRecipes() {
+        String sqlStatement = "select * from Recipe";
+        return getListOfRecipes(sqlStatement);
+    }
+    
+    private static List<Recipe> getListOfRecipes(String sqlStatement) {
         Connection connection = DatabaseConnection.getConnection();
         OraclePreparedStatement preparedStatement = null;
         OracleResultSet resultSet = null;
         
         List<Recipe> recipes = new ArrayList<>();
         try {
-            String sqlStatement = "select * from Recipe";
+            
             preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             
@@ -145,15 +150,6 @@ public class RecipeService {
     private static String buildRecipeQueryString(List<Ingredient> ingredients, String category) {
         StringBuilder sqlStatementBuilder = new StringBuilder();
         sqlStatementBuilder.append("select * from Recipe");
-        
-        /*
-        sample query:
-        
-        select name, instructions, category from Recipe
-            inner join RecipeIngredient on RecipeIngredient.recipeName = Recipe.name
-            where RecipeIngredient.ingredientName in ('Pepperoni', 'Lettuce', 'Marinara')
-            and Recipe.category = 'Pasta';
-        */
 
         if(ingredients != null && !ingredients.isEmpty()) {
             sqlStatementBuilder.append(" inner join RecipeIngredient on RecipeIngredient.recipeName = Recipe.name");
@@ -182,6 +178,29 @@ public class RecipeService {
             sqlStatementBuilder.append("'");
         }
             
+        return sqlStatementBuilder.toString();
+    }
+    
+    public static List<Recipe> getRecipesByNames(List<String> recipeNames) {
+        String sqlStatement = buildRecipeByNameQueryString(recipeNames);
+        return getListOfRecipes(sqlStatement);
+    }
+    
+    private static String buildRecipeByNameQueryString(List<String> recipeNames) {
+        StringBuilder sqlStatementBuilder = new StringBuilder();
+        sqlStatementBuilder.append("select * from Recipe where name in (");
+        
+        for(int i = 0; i < recipeNames.size(); i++) {
+            sqlStatementBuilder.append("'");
+            sqlStatementBuilder.append(recipeNames.get(i));
+            sqlStatementBuilder.append("'");
+            
+            if(i < recipeNames.size() - 1) {
+                sqlStatementBuilder.append(",");
+            }
+        }
+        sqlStatementBuilder.append(")");
+        
         return sqlStatementBuilder.toString();
     }
     

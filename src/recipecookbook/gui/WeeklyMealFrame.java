@@ -5,17 +5,83 @@
  */
 package recipecookbook.gui;
 
+import java.text.DateFormatSymbols;
+import java.time.LocalDate;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import javax.swing.DefaultComboBoxModel;
+import recipecookbook.models.Constants;
+import recipecookbook.models.Meal;
+import recipecookbook.models.Recipe;
+import recipecookbook.models.RecipeMeal;
+import recipecookbook.services.MealService;
+import recipecookbook.services.RecipeMealService;
+import recipecookbook.services.RecipeService;
+
 /**
  *
  * @author MUKESH
  */
 public class WeeklyMealFrame extends javax.swing.JFrame {
+    List<Meal> meals = new ArrayList<>();
+    List<RecipeMeal> recipeMeals = new ArrayList<>();
+    List<Recipe> recipes = new ArrayList<>();
 
     /**
      * Creates new form WeeklyMealFrame
      */
     public WeeklyMealFrame() {
         initComponents();
+        initializeDayOfWeekComboBox();
+        initializeMeals();
+        initializeRecipes();
+    }
+    
+    //fill the day of week drop down with names of the days of the week
+    private void initializeDayOfWeekComboBox() {
+        DefaultComboBoxModel weekDayComboBoxModel = new DefaultComboBoxModel();
+        String[] weekDays = DateFormatSymbols.getInstance().getWeekdays();
+        for(String weekDay : weekDays) {
+            weekDayComboBoxModel.addElement(weekDay);
+        }
+        dayOfWeekComboBox.setModel(weekDayComboBoxModel);
+    }
+    
+    //get all the meals from the current week
+    private void initializeMeals() {
+        TemporalField fieldUS = WeekFields.of(Locale.US).dayOfWeek();
+        LocalDate weekStart = LocalDate.now().with(fieldUS, 1);
+        meals = MealService.getAllMealsFromWeek(weekStart);
+    }
+    
+    //get all recipes and put them in each meal type drop down
+    private void initializeRecipes() {
+        recipeMeals = RecipeMealService.getAllRecipeMealsFromMeals(meals);
+        
+        recipes = RecipeService.getAllRecipes();
+        Recipe[] recipeArray = new Recipe[recipes.size()];
+        for(int i = 0; i < recipeArray.length; i++) {
+            recipeArray[i] = recipes.get(i);
+        }
+        
+        //set up combo boxes with all recipes
+        DefaultComboBoxModel breakfastComboBoxModel = new DefaultComboBoxModel(recipeArray);
+        DefaultComboBoxModel lunchComboBoxModel = new DefaultComboBoxModel(recipeArray);
+        DefaultComboBoxModel dinnerComboBoxModel = new DefaultComboBoxModel(recipeArray);
+        breakfastComboBox.setModel(breakfastComboBoxModel);
+        lunchComboBox.setModel(lunchComboBoxModel);
+        dinnerComboBox.setModel(dinnerComboBoxModel);
+        
+        resetDayComboBoxes();
+    }
+    
+    private void resetDayComboBoxes() {
+        breakfastComboBox.setSelectedIndex(-1);
+        lunchComboBox.setSelectedIndex(-1);
+        dinnerComboBox.setSelectedIndex(-1);
     }
 
     /**
@@ -27,225 +93,233 @@ public class WeeklyMealFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ModayCheckBox = new javax.swing.JCheckBox();
-        TuesdayCheckBox = new javax.swing.JCheckBox();
-        WednesdayCheckBox = new javax.swing.JCheckBox();
-        ThursdayCheckBox = new javax.swing.JCheckBox();
-        FridayCheckBox = new javax.swing.JCheckBox();
-        SaturdayCheckBox = new javax.swing.JCheckBox();
-        SundayCheckBox = new javax.swing.JCheckBox();
-        BreakfastComboBox = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        ChangeBreakfast = new javax.swing.JButton();
-        ChangeLunch = new javax.swing.JButton();
-        ChangeDinner = new javax.swing.JButton();
-        GenerateList = new javax.swing.JButton();
+        breakfastComboBox = new javax.swing.JComboBox<>();
+        lunchComboBox = new javax.swing.JComboBox<>();
+        dinnerComboBox = new javax.swing.JComboBox<>();
+        saveMealsButton = new javax.swing.JButton();
+        generateListButton = new javax.swing.JButton();
+        dayOfWeekComboBox = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        startOfWeekLabel = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        ModayCheckBox.setSelected(true);
-        ModayCheckBox.setText("Monday");
-        ModayCheckBox.addActionListener(new java.awt.event.ActionListener() {
+        saveMealsButton.setText("Save Meals");
+        saveMealsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ModayCheckBoxActionPerformed(evt);
+                saveMealsButtonActionPerformed(evt);
             }
         });
 
-        TuesdayCheckBox.setSelected(true);
-        TuesdayCheckBox.setActionCommand("Tuesday");
-        TuesdayCheckBox.setDoubleBuffered(true);
-        TuesdayCheckBox.setLabel("Tuesday");
-        TuesdayCheckBox.addActionListener(new java.awt.event.ActionListener() {
+        generateListButton.setText("Generate List");
+        generateListButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TuesdayCheckBoxActionPerformed(evt);
+                generateListButtonActionPerformed(evt);
             }
         });
 
-        WednesdayCheckBox.setText("Wednesday");
-
-        ThursdayCheckBox.setText("Thursday");
-        ThursdayCheckBox.setAutoscrolls(true);
-
-        FridayCheckBox.setText("Friday");
-
-        SaturdayCheckBox.setText("Saturday");
-
-        SundayCheckBox.setText("Sunday");
-        SundayCheckBox.addActionListener(new java.awt.event.ActionListener() {
+        dayOfWeekComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SundayCheckBoxActionPerformed(evt);
+                dayOfWeekComboBoxActionPerformed(evt);
             }
         });
 
-        BreakfastComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Breakfast" }));
-        BreakfastComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BreakfastComboBoxActionPerformed(evt);
-            }
-        });
+        jLabel1.setText("Day of the Week:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunch" }));
+        startOfWeekLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        startOfWeekLabel.setText("Start of the Week:");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinner" }));
+        jLabel2.setText("Breakfast");
 
-        ChangeBreakfast.setText("Change");
+        jLabel3.setText("Lunch");
 
-        ChangeLunch.setText("Change");
-
-        ChangeDinner.setText("Change");
-
-        GenerateList.setText("Generate List");
+        jLabel4.setText("Dinner");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(FridayCheckBox)
-                            .addComponent(WednesdayCheckBox)
-                            .addComponent(ModayCheckBox)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(SundayCheckBox)
-                                    .addComponent(TuesdayCheckBox)
-                                    .addComponent(ThursdayCheckBox))
-                                .addGap(99, 99, 99)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(BreakfastComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(70, 70, 70)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(ChangeBreakfast)
-                                        .addComponent(ChangeLunch))
-                                    .addComponent(ChangeDinner))))
-                        .addContainerGap(103, Short.MAX_VALUE))
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2))
+                    .addComponent(startOfWeekLabel)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(SaturdayCheckBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(GenerateList)
-                        .addGap(67, 67, 67))))
+                        .addComponent(dayOfWeekComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(breakfastComboBox, 0, 140, Short.MAX_VALUE)
+                                .addComponent(lunchComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(dinnerComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(generateListButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(saveMealsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(startOfWeekLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(SundayCheckBox))
+                        .addComponent(saveMealsButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(generateListButton))
+                    .addComponent(dayOfWeekComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(BreakfastComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ChangeBreakfast))))
-                .addGap(18, 18, 18)
-                .addComponent(ModayCheckBox)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(TuesdayCheckBox))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ChangeLunch))))
-                .addGap(18, 18, 18)
-                .addComponent(WednesdayCheckBox)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(ThursdayCheckBox))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ChangeDinner))))
-                .addGap(18, 18, 18)
-                .addComponent(FridayCheckBox)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(SaturdayCheckBox))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(GenerateList)))
-                .addContainerGap(130, Short.MAX_VALUE))
+                        .addComponent(breakfastComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lunchComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dinnerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ModayCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModayCheckBoxActionPerformed
+    private void generateListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateListButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ModayCheckBoxActionPerformed
+    }//GEN-LAST:event_generateListButtonActionPerformed
 
-    private void TuesdayCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TuesdayCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TuesdayCheckBoxActionPerformed
+    private void dayOfWeekComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayOfWeekComboBoxActionPerformed
+        //when a day is selected we need to change each of the meal combo boxes to reflect the meal chosen on that certain day
+        String dayOfWeek = ((String) dayOfWeekComboBox.getSelectedItem()).toLowerCase();
+        
+        resetDayComboBoxes();
+        for(Meal meal : meals) {
+            if(meal.getDayOfWeek().equals(dayOfWeek)) {
+                switch(meal.getMealType()) {
+                    case Constants.BREAKFAST:
+                         breakfastComboBox.setSelectedItem(matchRecipeToMeal(meal));
+                        break;
+                    case Constants.LUNCH:
+                        lunchComboBox.setSelectedItem(matchRecipeToMeal(meal));
+                        break;
+                    case Constants.DINNER:
+                        dinnerComboBox.setSelectedItem(matchRecipeToMeal(meal));
+                        break;
+                }
+            }
+        }
+    }//GEN-LAST:event_dayOfWeekComboBoxActionPerformed
 
-    private void SundayCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SundayCheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SundayCheckBoxActionPerformed
+    private void saveMealsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMealsButtonActionPerformed
+        String dayOfWeek = ((String) dayOfWeekComboBox.getSelectedItem()).toLowerCase();
+        
+        Recipe breakfastRecipe = (Recipe) breakfastComboBox.getSelectedItem();
+        Recipe lunchRecipe = (Recipe) lunchComboBox.getSelectedItem();
+        Recipe dinnerRecipe = (Recipe) dinnerComboBox.getSelectedItem();
+        
+        Meal breakfastMeal = matchMealToRecipe(breakfastRecipe);
+        Meal lunchMeal = matchMealToRecipe(lunchRecipe);
+        Meal dinnerMeal = matchMealToRecipe(dinnerRecipe);
+        
+        RecipeMeal breakfastMealRecipe = matchRecipeMeal(breakfastRecipe, breakfastMeal);
+        RecipeMeal lunchMealRecipe = matchRecipeMeal(lunchRecipe, lunchMeal);
+        RecipeMeal dinnerMealRecipe = matchRecipeMeal(dinnerRecipe, dinnerMeal);
+        
+        //if the meal is null, then we need to create a new meal
+        //if the meal is not null, then we will need to ensure it isn't already a part of a MealRecipe. go on to see how
+        
+        //if the mealRecipe is not null, then don't need to do anything
+        //if the mealRecipe is null, then we need to add the meal to a recipe
+            //before saving the mealRecipe, we need to make sure that a mealRecipe isn't already referencing the meal
+            //if so, we need to delete the old mealRecipe and create a whole new one with the meal and the recipe
+    }//GEN-LAST:event_saveMealsButtonActionPerformed
 
-    private void BreakfastComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BreakfastComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BreakfastComboBoxActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<Recipe> breakfastComboBox;
+    private javax.swing.JComboBox<String> dayOfWeekComboBox;
+    private javax.swing.JComboBox<Recipe> dinnerComboBox;
+    private javax.swing.JButton generateListButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JComboBox<Recipe> lunchComboBox;
+    private javax.swing.JButton saveMealsButton;
+    private javax.swing.JLabel startOfWeekLabel;
+    // End of variables declaration//GEN-END:variables
+    
+    private Recipe matchRecipeToMeal(Meal meal) {
+        String recipeName = null;
+        if(meal != null) {
+            for(RecipeMeal recipeMeal : recipeMeals) {
+                if(recipeMeal.getMealId().equals(meal.getId())) {
+                    recipeName = recipeMeal.getRecipeName();
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(WeeklyMealFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(WeeklyMealFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(WeeklyMealFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(WeeklyMealFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new WeeklyMealFrame().setVisible(true);
+            
+            if(recipeName != null) {
+                for(Recipe recipe : recipes) {
+                    if(recipe.getName().equals(recipeName)) {
+                        return recipe;
+                    }
+                }
             }
-        });
+        }
+        
+        return null;
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> BreakfastComboBox;
-    private javax.swing.JButton ChangeBreakfast;
-    private javax.swing.JButton ChangeDinner;
-    private javax.swing.JButton ChangeLunch;
-    private javax.swing.JCheckBox FridayCheckBox;
-    private javax.swing.JButton GenerateList;
-    private javax.swing.JCheckBox ModayCheckBox;
-    private javax.swing.JCheckBox SaturdayCheckBox;
-    private javax.swing.JCheckBox SundayCheckBox;
-    private javax.swing.JCheckBox ThursdayCheckBox;
-    private javax.swing.JCheckBox TuesdayCheckBox;
-    private javax.swing.JCheckBox WednesdayCheckBox;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    // End of variables declaration//GEN-END:variables
+    
+    private Meal matchMealToRecipe(Recipe recipe) {
+        Integer mealId = null;
+        if(recipe != null) {
+            for(RecipeMeal recipeMeal : recipeMeals) {
+                if(recipeMeal.getRecipeName().equals(recipe.getName())) {
+                    mealId = recipeMeal.getMealId();
+                    break;
+                }
+            }
+            
+            if(mealId != null) {
+                for(Meal meal : meals) {
+                    if(meal.getId().equals(mealId)) {
+                        return meal;
+                    }
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    private RecipeMeal matchRecipeMeal(Recipe recipe, Meal meal) {
+        if(recipe != null && meal != null) {
+            for(RecipeMeal recipeMeal : recipeMeals) {
+                if(recipeMeal.getMealId().equals(meal.getId()) 
+                        && recipeMeal.getRecipeName().equals(recipe.getName())) {
+                    return recipeMeal;
+                }
+            }
+        }
+        
+        return null;
+    }
 }

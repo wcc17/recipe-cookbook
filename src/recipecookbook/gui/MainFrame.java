@@ -54,6 +54,11 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         weeklyMeal.setText("Weekly Meal");
+        weeklyMeal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                weeklyMealActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -84,16 +89,21 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void RecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipeActionPerformed
       /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
                 new RecipeFrame().setVisible(true);
-            }
-        });
+//            }
+//        });
     }//GEN-LAST:event_RecipeActionPerformed
 
     private void FridgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FridgeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_FridgeActionPerformed
+
+    private void weeklyMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weeklyMealActionPerformed
+        // TODO add your handling code here:
+        new WeeklyMealFrame().setVisible(true);
+    }//GEN-LAST:event_weeklyMealActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
