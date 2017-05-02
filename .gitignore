@@ -18,3 +18,7 @@ build/**
 nbproject/private/private.properties
 
 nbproject/project.properties
+
+*.properties
+
+nbproject/private/private.properties
