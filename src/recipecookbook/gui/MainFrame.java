@@ -97,7 +97,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_RecipeActionPerformed
 
     private void FridgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FridgeActionPerformed
-        // TODO add your handling code here:
+        new IngredientFrame().setVisible(true);
     }//GEN-LAST:event_FridgeActionPerformed
 
     private void weeklyMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weeklyMealActionPerformed

@@ -272,22 +272,24 @@ public class WeeklyMealFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_generateListButtonActionPerformed
 
     private void dayOfWeekComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayOfWeekComboBoxActionPerformed
-        //when a day is selected we need to change each of the meal combo boxes to reflect the meal chosen on that certain day
-        String dayOfWeek = ((String) dayOfWeekComboBox.getSelectedItem()).toLowerCase();
         
-        resetDayComboBoxes();
-        for(Meal meal : meals) {
-            if(meal.getDayOfWeek().equals(dayOfWeek)) {
-                switch(meal.getMealType()) {
-                    case Constants.BREAKFAST:
-                         breakfastComboBox.setSelectedItem(matchRecipeToMeal(meal));
-                        break;
-                    case Constants.LUNCH:
-                        lunchComboBox.setSelectedItem(matchRecipeToMeal(meal));
-                        break;
-                    case Constants.DINNER:
-                        dinnerComboBox.setSelectedItem(matchRecipeToMeal(meal));
-                        break;
+        if(dayOfWeekComboBox.getSelectedItem() != null) {
+            //when a day is selected we need to change each of the meal combo boxes to reflect the meal chosen on that certain day
+            String dayOfWeek = ((String) dayOfWeekComboBox.getSelectedItem()).toLowerCase();
+
+            for(Meal meal : meals) {
+                if(meal.getDayOfWeek().equals(dayOfWeek)) {
+                    switch(meal.getMealType()) {
+                        case Constants.BREAKFAST:
+                             breakfastComboBox.setSelectedItem(matchRecipeToMeal(meal));
+                            break;
+                        case Constants.LUNCH:
+                            lunchComboBox.setSelectedItem(matchRecipeToMeal(meal));
+                            break;
+                        case Constants.DINNER:
+                            dinnerComboBox.setSelectedItem(matchRecipeToMeal(meal));
+                            break;
+                    }
                 }
             }
         }
