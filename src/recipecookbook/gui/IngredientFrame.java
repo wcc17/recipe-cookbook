@@ -137,6 +137,11 @@ public class IngredientFrame extends javax.swing.JFrame {
         });
 
         addFridgeButton.setText("Add To Fridge");
+        addFridgeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addFridgeButtonActionPerformed(evt);
+            }
+        });
 
         deleteIngredientButton.setText("Delete Ingredient");
 
@@ -247,18 +252,18 @@ public class IngredientFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(inFridgeLabel)
                             .addComponent(removeFridgeButton))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(caloriesLabel)
                             .addComponent(addFridgeButton))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(fatLabel)
@@ -275,8 +280,8 @@ public class IngredientFrame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
                             .addComponent(sodiumLabel)))
-                    .addComponent(jScrollPane1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jLabel8)
                 .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -316,21 +321,45 @@ public class IngredientFrame extends javax.swing.JFrame {
     private void ingredientListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_ingredientListValueChanged
         Ingredient ingredient = ingredientList.getSelectedValue();
         
-        inFridgeLabel.setText(String.valueOf(ingredient.isInFridge()));
-        caloriesLabel.setText(ingredient.getCalories().toString());
-        fatLabel.setText(ingredient.getFat().toString());
-        proteinLabel.setText(ingredient.getProtein().toString());
-        sodiumLabel.setText(ingredient.getSodium().toString());
-        sugarLabel.setText(ingredient.getSugar().toString());
+        if(ingredient != null) {
+            inFridgeLabel.setText(String.valueOf(ingredient.isInFridge()));
+            caloriesLabel.setText(ingredient.getCalories().toString());
+            fatLabel.setText(ingredient.getFat().toString());
+            proteinLabel.setText(ingredient.getProtein().toString());
+            sodiumLabel.setText(ingredient.getSodium().toString());
+            sugarLabel.setText(ingredient.getSugar().toString());
+        }
     }//GEN-LAST:event_ingredientListValueChanged
 
     private void removeFridgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFridgeButtonActionPerformed
-        // TODO add your handling code here:
+        Ingredient ingredient = ingredientList.getSelectedValue();
+        
+        if(ingredient != null) {
+            ingredient.setInFridge(false);
+            IngredientService.updateIngredientInFridge(ingredient);
+
+            initializeIngredients();
+            ingredientList.setSelectedValue(ingredient, true);
+        }
     }//GEN-LAST:event_removeFridgeButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        // TODO add your handling code here:
+        Ingredient ingredient = new Ingredient();
+//        ingredient.setCalories(Integer.valueOf(caloriesTextField.getText()));
+//        ingredient.setFat(WIDTH);
     }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void addFridgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFridgeButtonActionPerformed
+        Ingredient ingredient = ingredientList.getSelectedValue();
+        
+        if(ingredient != null) {
+            ingredient.setInFridge(true);
+            IngredientService.updateIngredientInFridge(ingredient);
+
+            initializeIngredients();
+            ingredientList.setSelectedValue(ingredient, true);
+        }
+    }//GEN-LAST:event_addFridgeButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addFridgeButton;

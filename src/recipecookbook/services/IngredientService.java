@@ -49,6 +49,34 @@ public class IngredientService {
         DatabaseConnection.close(resultSet);
     }
     
+    public static void updateIngredientInFridge(Ingredient ingredient) {
+        Connection connection = DatabaseConnection.getConnection();
+        OraclePreparedStatement preparedStatement = null;
+        OracleResultSet resultSet = null;
+        
+        try {
+            String sqlStatement = "update Ingredient set inFridge=? where name=?";
+            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
+            
+            String yesNo = Constants.NO;
+            if(ingredient.isInFridge()) {
+                yesNo = Constants.YES;
+            }
+            preparedStatement.setString(1, yesNo);
+            preparedStatement.setString(2, ingredient.getName());
+            
+            resultSet = (OracleResultSet) preparedStatement.executeQuery();
+            System.out.println("Ingredient: " + ingredient.getName() + " updated");
+        } catch (SQLException e) {
+            //              JOptionPane.showMessageDialog(null, e);
+            System.out.println("Error executing query");
+            System.out.println(e);
+        }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
+    }
+    
     public static List<Ingredient> getAllIngredients() {
         Connection connection = DatabaseConnection.getConnection();
         OraclePreparedStatement preparedStatement = null;
