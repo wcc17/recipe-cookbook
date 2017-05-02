@@ -13,6 +13,51 @@ import recipecookbook.models.RecipeMeal;
 
 public class RecipeMealService {
     
+    public static void deleteRecipeMealByMeal(Meal meal) {
+        Connection connection = DatabaseConnection.getConnection();
+        OraclePreparedStatement preparedStatement = null;
+        OracleResultSet resultSet = null;
+        
+        try {
+            String sqlStatement = "delete RecipeMeal where mealId = ?";
+            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1, meal.getId());
+            
+            resultSet = (OracleResultSet) preparedStatement.executeQuery();
+            System.out.println("Deleted RecipeMeal with mealId: " + meal.getId());
+        } catch (SQLException e) {
+            //              JOptionPane.showMessageDialog(null, e);
+            System.out.println("Error executing query");
+            System.out.println(e);
+        }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
+    }
+    
+    public static void deleteRecipeMealByRecipeMeal(RecipeMeal recipeMeal) {
+        Connection connection = DatabaseConnection.getConnection();
+        OraclePreparedStatement preparedStatement = null;
+        OracleResultSet resultSet = null;
+        
+        try {
+            String sqlStatement = "delete RecipeMeal where recipeName = ? and mealId = ?";
+            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, recipeMeal.getRecipeName());
+            preparedStatement.setInt(2, recipeMeal.getMealId());
+            
+            resultSet = (OracleResultSet) preparedStatement.executeQuery();
+            System.out.println("Deleted RecipeMeal with recipeName " + recipeMeal.getRecipeName() + " and mealId: " + recipeMeal.getMealId());
+        } catch (SQLException e) {
+            //              JOptionPane.showMessageDialog(null, e);
+            System.out.println("Error executing query");
+            System.out.println(e);
+        }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
+    }
+    
     public static void addRecipeToMeal(Recipe recipe, Meal meal) {
         Connection connection = DatabaseConnection.getConnection();
         OraclePreparedStatement preparedStatement = null;
@@ -31,6 +76,9 @@ public class RecipeMealService {
             System.out.println("Error executing query");
             System.out.println(e);
         }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
     }
     
     public static List<RecipeMeal> getAllRecipeMealsFromMeals(List<Meal> meals) {
@@ -53,6 +101,9 @@ public class RecipeMealService {
             System.out.println("Error executing query");
             System.out.println(e);
         }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
         
         return recipeMeals;
     }

@@ -5,6 +5,7 @@
  */
 package recipecookbook.gui;
 
+import java.sql.Date;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.time.temporal.TemporalField;
@@ -29,7 +30,8 @@ public class WeeklyMealFrame extends javax.swing.JFrame {
     List<Meal> meals = new ArrayList<>();
     List<RecipeMeal> recipeMeals = new ArrayList<>();
     List<Recipe> recipes = new ArrayList<>();
-
+    LocalDate weekStart = null;
+    
     /**
      * Creates new form WeeklyMealFrame
      */
@@ -53,7 +55,7 @@ public class WeeklyMealFrame extends javax.swing.JFrame {
     //get all the meals from the current week
     private void initializeMeals() {
         TemporalField fieldUS = WeekFields.of(Locale.US).dayOfWeek();
-        LocalDate weekStart = LocalDate.now().with(fieldUS, 1);
+        weekStart = LocalDate.now().with(fieldUS, 1);
         meals = MealService.getAllMealsFromWeek(weekStart);
     }
     
@@ -235,21 +237,19 @@ public class WeeklyMealFrame extends javax.swing.JFrame {
         Recipe lunchRecipe = (Recipe) lunchComboBox.getSelectedItem();
         Recipe dinnerRecipe = (Recipe) dinnerComboBox.getSelectedItem();
         
-        Meal breakfastMeal = matchMealToRecipe(breakfastRecipe);
-        Meal lunchMeal = matchMealToRecipe(lunchRecipe);
-        Meal dinnerMeal = matchMealToRecipe(dinnerRecipe);
+        Meal breakfastMeal = matchMealToRecipe(breakfastRecipe, dayOfWeek);
+        Meal lunchMeal = matchMealToRecipe(lunchRecipe, dayOfWeek);
+        Meal dinnerMeal = matchMealToRecipe(dinnerRecipe, dayOfWeek);
         
-        RecipeMeal breakfastMealRecipe = matchRecipeMeal(breakfastRecipe, breakfastMeal);
-        RecipeMeal lunchMealRecipe = matchRecipeMeal(lunchRecipe, lunchMeal);
-        RecipeMeal dinnerMealRecipe = matchRecipeMeal(dinnerRecipe, dinnerMeal);
+        RecipeMeal breakfastRecipeMeal = matchRecipeMeal(breakfastRecipe, breakfastMeal);
+        RecipeMeal lunchRecipeMeal = matchRecipeMeal(lunchRecipe, lunchMeal);
+        RecipeMeal dinnerRecipeMeal = matchRecipeMeal(dinnerRecipe, dinnerMeal);
         
-        //if the meal is null, then we need to create a new meal
-        //if the meal is not null, then we will need to ensure it isn't already a part of a MealRecipe. go on to see how
+        saveRecipeMeal(breakfastRecipe, breakfastMeal, breakfastRecipeMeal, dayOfWeek, Constants.BREAKFAST);
+        saveRecipeMeal(lunchRecipe, lunchMeal, lunchRecipeMeal, dayOfWeek, Constants.LUNCH);
+        saveRecipeMeal(dinnerRecipe, dinnerMeal, dinnerRecipeMeal, dayOfWeek, Constants.DINNER);
         
-        //if the mealRecipe is not null, then don't need to do anything
-        //if the mealRecipe is null, then we need to add the meal to a recipe
-            //before saving the mealRecipe, we need to make sure that a mealRecipe isn't already referencing the meal
-            //if so, we need to delete the old mealRecipe and create a whole new one with the meal and the recipe
+        System.out.println("All meals saved");
     }//GEN-LAST:event_saveMealsButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -265,6 +265,50 @@ public class WeeklyMealFrame extends javax.swing.JFrame {
     private javax.swing.JButton saveMealsButton;
     private javax.swing.JLabel startOfWeekLabel;
     // End of variables declaration//GEN-END:variables
+    
+    private void saveRecipeMeal(Recipe recipe, Meal meal, RecipeMeal recipeMeal, String dayOfWeek, String mealType) {
+        //if recipeMeal is not null, then theres already a recipeMeal for this specific recipe and meal, so no need to save anything
+        if(recipeMeal == null) {
+            
+            //if recipe is null, then we didn't select anything
+            if(recipe != null) {
+                
+                if(meal == null) {
+                    //create a new Meal and save it to the database
+                    meal = new Meal();
+                    meal.setDayOfWeek(dayOfWeek.toLowerCase());
+                    meal.setMealType(mealType);
+                    meal.setName("TODO: DO WE NEED THIS"); //TODO: do we even need name?
+                    meal.setWeekStart(Date.valueOf(weekStart));
+                    
+                    meal = MealService.createNewMeal(meal);
+                    System.out.println("Created a new meal");
+                } else {
+                    //see if theres a RecipeMeal out there associated with another recipe. If so, delete it
+                    RecipeMeal otherRecipeMeal = matchRecipeMealToMeal(meal);
+                    if(otherRecipeMeal != null) {
+                        RecipeMealService.deleteRecipeMealByRecipeMeal(recipeMeal);
+                        System.out.println("Deleted old RecipeMeal");
+                    }
+                } 
+                
+                //save the new RecipeMeal object
+                RecipeMealService.addRecipeToMeal(recipe, meal);
+                System.out.println("Saved recipeMeal for mealType " + mealType);
+            } else {
+                //TODO: if no recipe is chosen, but a meal exists for this dayOfWeek and mealType, should we delete the meal? (and a recipeMeal?)
+                for(Meal otherMeal : meals) {
+                    if(otherMeal.getDayOfWeek().equals(dayOfWeek)
+                            && otherMeal.getMealType().equals(mealType)
+                            && otherMeal.getWeekStart().equals(Date.valueOf(weekStart))) {
+                        System.out.println("Deleting existing meal after user removed recipe from it");
+                        MealService.deleteMeal(otherMeal);
+                        RecipeMealService.deleteRecipeMealByMeal(meal);
+                    }
+                }
+            }
+        }
+    }
     
     private Recipe matchRecipeToMeal(Meal meal) {
         String recipeName = null;
@@ -288,7 +332,7 @@ public class WeeklyMealFrame extends javax.swing.JFrame {
         return null;
     }
     
-    private Meal matchMealToRecipe(Recipe recipe) {
+    private Meal matchMealToRecipe(Recipe recipe, String dayOfWeek) {
         Integer mealId = null;
         if(recipe != null) {
             for(RecipeMeal recipeMeal : recipeMeals) {
@@ -300,7 +344,8 @@ public class WeeklyMealFrame extends javax.swing.JFrame {
             
             if(mealId != null) {
                 for(Meal meal : meals) {
-                    if(meal.getId().equals(mealId)) {
+                    if(meal.getId().equals(mealId) 
+                            && meal.getDayOfWeek().equals(dayOfWeek)) {
                         return meal;
                     }
                 }
@@ -315,6 +360,18 @@ public class WeeklyMealFrame extends javax.swing.JFrame {
             for(RecipeMeal recipeMeal : recipeMeals) {
                 if(recipeMeal.getMealId().equals(meal.getId()) 
                         && recipeMeal.getRecipeName().equals(recipe.getName())) {
+                    return recipeMeal;
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    private RecipeMeal matchRecipeMealToMeal(Meal meal) {
+        if(meal != null) {
+            for(RecipeMeal recipeMeal : recipeMeals) {
+                if(recipeMeal.getMealId().equals(meal.getId())) {
                     return recipeMeal;
                 }
             }

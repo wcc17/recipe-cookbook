@@ -44,6 +44,9 @@ public class IngredientService {
             System.out.println("Error executing query");
             System.out.println(e);
         }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
     }
     
     public static List<Ingredient> getAllIngredients() {
@@ -66,6 +69,9 @@ public class IngredientService {
             System.out.println("Error executing query");
             System.out.println(e);
         }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
         
         return ingredients;
     }
@@ -96,6 +102,9 @@ public class IngredientService {
             System.out.println("Error executing query");
             System.out.println(e.getMessage());
         }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
         
         return ingredients;
     }

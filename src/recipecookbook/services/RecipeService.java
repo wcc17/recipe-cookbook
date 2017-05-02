@@ -80,6 +80,9 @@ public class RecipeService {
             System.out.println("Error executing query");
             System.out.println(e);
         }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
     }
     
     public static List<Recipe> getAllRecipes() {
@@ -107,6 +110,9 @@ public class RecipeService {
             System.out.println("Error executing query");
             System.out.println(e);
         }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
         
         return recipes;
     }
