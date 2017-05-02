@@ -20,18 +20,17 @@ public class MealService {
         CallableStatement callableStatement = null;
         
         try {
-            String sqlStatement = "BEGIN insert into Meal(name, mealType, dayOfWeek, weekStart) values (?,?,?,?) returning id into ?; END;";
+            String sqlStatement = "BEGIN insert into Meal(mealType, dayOfWeek, weekStart) values (?,?,?) returning id into ?; END;";
             callableStatement = connection.prepareCall(sqlStatement);
-            callableStatement.setString(1, meal.getName());
-            callableStatement.setString(2, meal.getMealType());
-            callableStatement.setString(3, meal.getDayOfWeek());
-            callableStatement.setDate(4, meal.getWeekStart());
-            callableStatement.registerOutParameter(5, OracleTypes.NUMBER);
+            callableStatement.setString(1, meal.getMealType());
+            callableStatement.setString(2, meal.getDayOfWeek());
+            callableStatement.setDate(3, meal.getWeekStart());
+            callableStatement.registerOutParameter(4, OracleTypes.NUMBER);
             
             callableStatement.execute();
-            meal.setId(callableStatement.getInt(5));
+            meal.setId(callableStatement.getInt(4));
             
-            System.out.println("Meal: " + meal.getName() + " created with id " + meal.getId());
+            System.out.println("Meal created with id " + meal.getId());
         } catch (SQLException e) {
             //              JOptionPane.showMessageDialog(null, e);
             System.out.println("Error executing query");
@@ -79,7 +78,6 @@ public class MealService {
             while(resultSet.next()) {
                 Meal meal = new Meal();
                 meal.setId(resultSet.getInt(("id")));
-                meal.setName(resultSet.getString("name"));
                 meal.setMealType(resultSet.getString("mealType"));
                 meal.setDayOfWeek(resultSet.getString("dayOfWeek"));
                 meal.setWeekStart(resultSet.getDate("weekStart"));

@@ -25,7 +25,6 @@ alter table Ingredient add (constraint inFridgeCK check(inFridge in('Y', 'y', 'N
 
 create table Meal (
     id number(10) primary key,
-    name varchar2(30),
     mealType varchar2(20),
     dayOfWeek varchar2(15),
     weekStart date --THIS SHOULD ALWAYS BE A SUNDAY
@@ -71,9 +70,9 @@ insert into Ingredient values('Noodles', 'N', 20, 20, 1, 2, 5);
 insert into Ingredient values('Lettuce', 'N', 5, 5, 0, 0, 5);
 insert into Ingredient values('Dressing', 'Y', 15, 15, 0, 15, 5);
 
-insert into Meal(name, mealType, dayOfWeek, weekStart) values('Pizza', 'dinner', 'monday', to_date('04/30/2017', 'MM/DD/YYYY'));
-insert into Meal(name, mealType, dayOfWeek, weekStart) values('Spaghetti', 'lunch', 'tuesday', to_date('04/30/2017', 'MM/DD/YYYY'));
-insert into Meal(name, mealType, dayOfWeek, weekStart) values('Salad', 'dinner', 'wednesday', to_date('04/30/2017', 'MM/DD/YYYY'));
+insert into Meal(mealType, dayOfWeek, weekStart) values('dinner', 'monday', to_date('04/30/2017', 'MM/DD/YYYY'));
+insert into Meal(mealType, dayOfWeek, weekStart) values('lunch', 'tuesday', to_date('04/30/2017', 'MM/DD/YYYY'));
+insert into Meal(mealType, dayOfWeek, weekStart) values('dinner', 'wednesday', to_date('04/30/2017', 'MM/DD/YYYY'));
 
 insert into RecipeIngredient values('Pizza', 'Pepperoni');
 insert into RecipeIngredient values('Pizza', 'Marinara');

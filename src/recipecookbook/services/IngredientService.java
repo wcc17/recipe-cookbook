@@ -109,6 +109,51 @@ public class IngredientService {
         return ingredients;
     }
     
+    public static List<Ingredient> getIngredientsByNames(List<String> names) {
+        Connection connection = DatabaseConnection.getConnection();
+        OraclePreparedStatement preparedStatement = null;
+        OracleResultSet resultSet = null;
+        
+        List<Ingredient> ingredients = new ArrayList<>();
+        try {
+            String sqlStatement = buildIngredientsByNamesQuery(names);
+            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
+            resultSet = (OracleResultSet) preparedStatement.executeQuery();
+            
+            while(resultSet.next()) {
+                Ingredient ingredient = getIngredientFromResultSet(resultSet);
+                ingredients.add(ingredient);
+            }
+        } catch(SQLException e) {
+            //              JOptionPane.showMessageDialog(null, e);
+            System.out.println("Error executing query");
+            System.out.println(e.getMessage());
+        }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
+        
+        return ingredients;
+    }
+    
+    private static String buildIngredientsByNamesQuery(List<String> names) {
+        StringBuilder sqlStatementBuilder = new StringBuilder();
+        
+        sqlStatementBuilder.append("select * from Ingredient where name in (");
+        for(int i = 0; i < names.size(); i++) {
+            sqlStatementBuilder.append("'");
+            sqlStatementBuilder.append(names.get(i));
+            sqlStatementBuilder.append("'");
+            
+            if(i < names.size() - 1) {
+                sqlStatementBuilder.append(",");
+            }
+        }
+        sqlStatementBuilder.append(")");
+        
+        return sqlStatementBuilder.toString();
+    }
+    
     private static Ingredient getIngredientFromResultSet(OracleResultSet resultSet) throws SQLException {
         Ingredient ingredient = new Ingredient();
         ingredient.setName(resultSet.getString("name"));       
