@@ -13,6 +13,28 @@ import recipecookbook.models.RecipeMeal;
 
 public class RecipeMealService {
     
+    public static void deleteRecipeMealByRecipe(Recipe recipe) {
+        Connection connection = DatabaseConnection.getConnection();
+        OraclePreparedStatement preparedStatement = null;
+        OracleResultSet resultSet = null;
+        
+        try {
+            String sqlStatement = "delete RecipeMeal where recipeName = ?";
+            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, recipe.getName());
+            
+            resultSet = (OracleResultSet) preparedStatement.executeQuery();
+            System.out.println("Deleted RecipeMeal with recipeName: " + recipe.getName());
+        } catch (SQLException e) {
+            //              JOptionPane.showMessageDialog(null, e);
+            System.out.println("Error executing query");
+            System.out.println(e);
+        }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
+    }
+    
     public static void deleteRecipeMealByMeal(Meal meal) {
         Connection connection = DatabaseConnection.getConnection();
         OraclePreparedStatement preparedStatement = null;
