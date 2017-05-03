@@ -1,20 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package recipecookbook.gui;
 
-import java.time.LocalDate;
-import java.util.List;
-import recipecookbook.DatabaseConnection;
-import recipecookbook.models.Meal;
-import recipecookbook.services.MealService;
+import java.awt.CardLayout;
 
-/**
- *
- * @author wcc17
- */
 public class MainFrame extends javax.swing.JFrame {
 
     /**
@@ -36,6 +23,10 @@ public class MainFrame extends javax.swing.JFrame {
         Recipe = new javax.swing.JButton();
         Fridge = new javax.swing.JButton();
         weeklyMeal = new javax.swing.JButton();
+        mainPanel = new javax.swing.JPanel();
+        recipePanel = new recipecookbook.gui.RecipePanel();
+        ingredientPanel = new recipecookbook.gui.IngredientPanel();
+        weeklyMealPanel = new recipecookbook.gui.WeeklyMealPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,55 +51,79 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        mainPanel.setLayout(new java.awt.CardLayout());
+        mainPanel.add(recipePanel, "recipePanel");
+        mainPanel.add(ingredientPanel, "ingredientPanel");
+        mainPanel.add(weeklyMealPanel, "weeklyMealPanel");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(122, 122, 122)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Recipe, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Fridge, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(weeklyMeal, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(Recipe, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Fridge, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addComponent(weeklyMeal, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(84, Short.MAX_VALUE)
-                .addComponent(Recipe, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
-                .addComponent(Fridge, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 75, 75)
-                .addComponent(weeklyMeal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(83, 83, 83))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Recipe, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Fridge, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(weeklyMeal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 601, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void RecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipeActionPerformed
-      /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-                new RecipeFrame().setVisible(true);
-//            }
-//        });
+        CardLayout card = (CardLayout) mainPanel.getLayout();
+        card.show(mainPanel, "recipePanel");
+        
+        if(!recipePanel.initialized) {
+            recipePanel.initialize();
+        }
     }//GEN-LAST:event_RecipeActionPerformed
 
     private void FridgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FridgeActionPerformed
-        new IngredientFrame().setVisible(true);
+        CardLayout card = (CardLayout) mainPanel.getLayout();
+        card.show(mainPanel, "ingredientPanel");
+        
+        if(!ingredientPanel.initialized) {
+            ingredientPanel.initialize();
+        }
     }//GEN-LAST:event_FridgeActionPerformed
 
     private void weeklyMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weeklyMealActionPerformed
-        // TODO add your handling code here:
-        new WeeklyMealFrame().setVisible(true);
+        CardLayout card = (CardLayout) mainPanel.getLayout();
+        card.show(mainPanel, "weeklyMealPanel");
+        
+        if(!weeklyMealPanel.initialized) {
+            weeklyMealPanel.initialize();
+        }
     }//GEN-LAST:event_weeklyMealActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Fridge;
     private javax.swing.JButton Recipe;
+    private recipecookbook.gui.IngredientPanel ingredientPanel;
+    private javax.swing.JPanel mainPanel;
+    private recipecookbook.gui.RecipePanel recipePanel;
     private javax.swing.JButton weeklyMeal;
+    private recipecookbook.gui.WeeklyMealPanel weeklyMealPanel;
     // End of variables declaration//GEN-END:variables
 }

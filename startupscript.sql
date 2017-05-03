@@ -60,9 +60,9 @@ begin
 end;
 /
 
-insert into Recipe values('Pizza', '1. Get pizza ingredients\n2. Make pizza', 'Junk Food');
-insert into Recipe values('Spaghetti', '1. Get spaghetti ingredients\n2. Heat up sauce\n3. Make spaghetti', 'Pasta');
-insert into Recipe values('Salad', '1. Get a bunch of salad stuff\n2. Mix up salad stuff\n3. Eat salad', 'Vegetable');
+insert into Recipe values('Pizza', '1. Get pizza ingredients' || CHR(10) || '2. Make pizza', 'Junk Food');
+insert into Recipe values('Spaghetti', '1. Get spaghetti ingredients' || CHR(10) || '2. Heat up sauce' || CHR(10) || '3. Make spaghetti', 'Pasta');
+insert into Recipe values('Salad', '1. Get a bunch of salad stuff' || CHR(10) || '2. Mix up salad stuff' || CHR(10) || '3. Eat salad', 'Vegetable');
 
 insert into Ingredient values('Pepperoni', 'Y', 30, 25, 0, 0, 5);
 insert into Ingredient values('Marinara', 'Y', 25, 15, 1, 3, 5);
