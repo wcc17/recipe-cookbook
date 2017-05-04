@@ -17,6 +17,8 @@ public class Ingredient {
     Integer sugar;
     
     Integer sodium;
+    
+    String foodGroup;
 
     public String getName() {
         return name;
@@ -72,6 +74,14 @@ public class Ingredient {
 
     public void setSodium(Integer sodium) {
         this.sodium = sodium;
+    }
+    
+    public String getFoodGroup() {
+        return foodGroup;
+    }
+    
+    public void setFoodGroup(String foodGroup) {
+        this.foodGroup = foodGroup;
     }
     
     @Override

@@ -44,7 +44,7 @@ public class IngredientService {
         OracleResultSet resultSet = null;
         
         try {
-            String sqlStatement = "insert into Ingredient(name, inFridge, calories, fat, protein, sugar, sodium) values (?,?,?,?,?,?,?)";
+            String sqlStatement = "insert into Ingredient(name, inFridge, calories, fat, protein, sugar, sodium, foodGroup) values (?,?,?,?,?,?,?,?)";
             preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, ingredient.getName());
             
@@ -59,6 +59,7 @@ public class IngredientService {
             preparedStatement.setInt(5, ingredient.getProtein());
             preparedStatement.setInt(6, ingredient.getSugar());
             preparedStatement.setInt(7, ingredient.getSodium());
+            preparedStatement.setString(8, ingredient.getFoodGroup());
             
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Ingredient: " + ingredient.getName() + " created");
@@ -213,6 +214,7 @@ public class IngredientService {
         ingredient.setProtein(resultSet.getInt("protein"));
         ingredient.setSodium(resultSet.getInt("sodium"));
         ingredient.setSugar(resultSet.getInt("sugar"));
+        ingredient.setFoodGroup(resultSet.getString("foodGroup"));
         
         String inFridgeString = resultSet.getString("inFridge");
         boolean inFridge = false;

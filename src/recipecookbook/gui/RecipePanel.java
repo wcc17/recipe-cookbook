@@ -29,6 +29,7 @@ public class RecipePanel extends javax.swing.JPanel {
     public RecipePanel() {
         initComponents();
         categoryLabel.setText("");
+        instructionsLabel.setText("");
         initialize();
     }
     
