@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import oracle.jdbc.OracleTypes;
@@ -32,7 +33,7 @@ public class MealService {
             
             System.out.println("Meal created with id " + meal.getId());
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error creating meal for day " + meal.getDayOfWeek() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -53,7 +54,7 @@ public class MealService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Deleted meal with mealId: " + meal.getId());
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error deleting meal with id: " + meal.getId() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -84,7 +85,7 @@ public class MealService {
                 meals.add(meal);
             }
         } catch (SQLException e) {
-//              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error getting meals from week starting " + weekStart.toString() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import recipecookbook.DatabaseConnection;
@@ -26,7 +27,7 @@ public class RecipeMealService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Deleted RecipeMeal with recipeName: " + recipe.getName());
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error deleting meals by recipe: " + recipe.getName() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -48,7 +49,7 @@ public class RecipeMealService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Deleted RecipeMeal with mealId: " + meal.getId());
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error deleting RecipeMeal by mealId: " + meal.getId() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -71,7 +72,7 @@ public class RecipeMealService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Deleted RecipeMeal with recipeName " + recipeMeal.getRecipeName() + " and mealId: " + recipeMeal.getMealId());
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error deleting RecipeMeal\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -94,7 +95,7 @@ public class RecipeMealService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Recipe: " + recipe.getName() + " added to Meal: " + meal.getId() + " on day: " + meal.getDayOfWeek());
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error adding recipe: " + recipe.getName() + " to meal: " + meal.getId() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -119,7 +120,7 @@ public class RecipeMealService {
                 recipeMeals.add(recipeMeal);
             }
         } catch(SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error getting RecipeMeals from meals\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }

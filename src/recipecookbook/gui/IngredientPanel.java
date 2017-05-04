@@ -7,6 +7,8 @@ package recipecookbook.gui;
 
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import oracle.net.aso.e;
 import recipecookbook.models.Ingredient;
 import recipecookbook.services.IngredientService;
 import recipecookbook.services.RecipeIngredientService;
@@ -416,7 +418,7 @@ public class IngredientPanel extends javax.swing.JPanel {
             initializeIngredients();
             ingredientList.setSelectedValue(ingredient, true);
         } else {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Not all fields filled out");
             System.out.println("Not all fields filled out");
         }
     }//GEN-LAST:event_saveButtonActionPerformed

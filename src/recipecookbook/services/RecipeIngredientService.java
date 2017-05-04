@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import recipecookbook.DatabaseConnection;
@@ -28,7 +29,7 @@ public class RecipeIngredientService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Deleted RecipeIngredient with recipeName: " + recipe.getName());
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error deleting RecipeIngredients for recipe: " + recipe.getName() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e.getMessage());
         }
@@ -47,7 +48,7 @@ public class RecipeIngredientService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Deleted RecipeIngredient with ingredientName: " + ingredient.getName());
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error deleting RecipeIngredients for ingredient: " + ingredient.getName() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e.getMessage());
         }
@@ -73,10 +74,37 @@ public class RecipeIngredientService {
                 System.out.println("Ingredient " + ingredient.getName() + " added to Recipe " + recipe.getName());
             }
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error adding ingredients to recipe: " + recipe.getName() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e.getMessage());
         }
+    }
+    
+    public static List<RecipeIngredient> getRecipeIngredientsFromRecipeName(List<String> recipeNames) {
+        Connection connection = DatabaseConnection.getConnection();
+        OraclePreparedStatement preparedStatement = null;
+        OracleResultSet resultSet = null;
+        
+        List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+        try {
+            String sqlStatement = getRecipeIngredientQueryString(recipeNames);
+            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
+            
+            resultSet = (OracleResultSet) preparedStatement.executeQuery();
+            while(resultSet.next()) {
+                RecipeIngredient recipeIngredient = getRecipeIngredientFromResultSet(resultSet);
+                recipeIngredients.add(recipeIngredient);
+            }
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error getting ingredients for recipes\n" + e);
+            System.out.println("Error executing query");
+            System.out.println(e);
+        }
+        
+        DatabaseConnection.close(preparedStatement);
+        DatabaseConnection.close(resultSet);
+        
+        return recipeIngredients;
     }
     
     private static List<String> getRecipeIngredientQuery(Recipe recipe, List<Ingredient> ingredients) {
@@ -96,33 +124,6 @@ public class RecipeIngredientService {
         }
         
         return sqlStatements;
-    }
-    
-    public static List<RecipeIngredient> getRecipeIngredientsFromRecipeName(List<String> recipeNames) {
-        Connection connection = DatabaseConnection.getConnection();
-        OraclePreparedStatement preparedStatement = null;
-        OracleResultSet resultSet = null;
-        
-        List<RecipeIngredient> recipeIngredients = new ArrayList<>();
-        try {
-            String sqlStatement = getRecipeIngredientQueryString(recipeNames);
-            preparedStatement = (OraclePreparedStatement) connection.prepareStatement(sqlStatement);
-            
-            resultSet = (OracleResultSet) preparedStatement.executeQuery();
-            while(resultSet.next()) {
-                RecipeIngredient recipeIngredient = getRecipeIngredientFromResultSet(resultSet);
-                recipeIngredients.add(recipeIngredient);
-            }
-        } catch(SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
-            System.out.println("Error executing query");
-            System.out.println(e);
-        }
-        
-        DatabaseConnection.close(preparedStatement);
-        DatabaseConnection.close(resultSet);
-        
-        return recipeIngredients;
     }
     
     private static RecipeIngredient getRecipeIngredientFromResultSet(OracleResultSet resultSet) 

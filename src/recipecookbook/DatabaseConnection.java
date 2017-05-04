@@ -5,6 +5,7 @@ import oracle.jdbc.OracleResultSet;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 public class DatabaseConnection {
     
@@ -22,7 +23,7 @@ public class DatabaseConnection {
                 return setupConnection();
             }
         } catch (SQLException e) {
-            //JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error Connecting\n" + e);
             System.out.println("Error connectiong");
             System.out.println(e);
             return null;        
@@ -34,7 +35,8 @@ public class DatabaseConnection {
     public static Connection setupConnection()
     {
         String jdbcDriver = "oracle.jdbc.driver.OracleDriver";
-        String jdbcUrl = "jdbc:oracle:thin:@0.tcp.ngrok.io:19734:cscdb";  // URL for the database including the protocol (jdbc), the vendor (oracle), the driver (thin), the server (csshrpt.eku.edu), the port number (1521), database instance name (cscdb)
+         // URL for the database including the protocol (jdbc), the vendor (oracle), the driver (thin), the server (csshrpt.eku.edu), the port number (1521), database instance name (cscdb)
+        String jdbcUrl = "jdbc:oracle:thin:@csshrpt.eku.edu:1521:cscdb";
 
         String username = "curry5452017";
         String password = "6673";
@@ -50,7 +52,7 @@ public class DatabaseConnection {
         }
         catch (Exception e)
         {
-//            JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error Connecting\n" + e);
             System.out.println("Error connectiong");
             System.out.println(e);
             return null;

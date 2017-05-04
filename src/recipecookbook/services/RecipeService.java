@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.JOptionPane;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import recipecookbook.DatabaseConnection;
@@ -27,7 +28,7 @@ public class RecipeService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Deleted Recipe with name: " + recipe.getName());
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error deleting recipe: " + recipe.getName() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -51,7 +52,7 @@ public class RecipeService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Recipe " + recipe.getName() + " created");
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error creating recipe: " + recipe.getName() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -81,7 +82,7 @@ public class RecipeService {
                 recipes.add(recipe);
             }
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error getting list of recipes\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -117,7 +118,7 @@ public class RecipeService {
             }
             
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error getting recipes by category and ingredients\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }

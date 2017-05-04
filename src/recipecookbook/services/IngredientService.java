@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.JOptionPane;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import recipecookbook.DatabaseConnection;
@@ -28,7 +29,7 @@ public class IngredientService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Ingredient " + ingredient.getName() + " deleted");
         } catch(SQLException e) {
-           //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error deleting ingredient: " + ingredient.getName() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -62,7 +63,7 @@ public class IngredientService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Ingredient: " + ingredient.getName() + " created");
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error creating ingredient " + ingredient.getName() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -90,7 +91,7 @@ public class IngredientService {
             resultSet = (OracleResultSet) preparedStatement.executeQuery();
             System.out.println("Ingredient: " + ingredient.getName() + " updated");
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error updating ingredient: " + ingredient.getName() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -115,7 +116,7 @@ public class IngredientService {
                 ingredients.add(ingredient);
             }
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error getting list of ingredients\n" + e);
             System.out.println("Error executing query");
             System.out.println(e);
         }
@@ -148,7 +149,7 @@ public class IngredientService {
                 ingredients.add(ingredient);
             }
         } catch (SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error getting ingredients for recipe: " + recipe.getName() + "\n" + e);
             System.out.println("Error executing query");
             System.out.println(e.getMessage());
         }
@@ -175,7 +176,7 @@ public class IngredientService {
                 ingredients.add(ingredient);
             }
         } catch(SQLException e) {
-            //              JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Error getting ingredients by name\n" + e);
             System.out.println("Error executing query");
             System.out.println(e.getMessage());
         }

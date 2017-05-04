@@ -100,6 +100,14 @@ public class RecipeCookBook {
                 new MainFrame().setVisible(true);
             }
         });
-    }
+        
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                System.out.println("closing application");
+                DatabaseConnection.closeConnection();
+            }
+        }); 
+   }
     
 }
