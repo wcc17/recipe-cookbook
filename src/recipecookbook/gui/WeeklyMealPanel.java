@@ -249,9 +249,9 @@ public class WeeklyMealPanel extends javax.swing.JPanel {
         Recipe lunchRecipe = (Recipe) lunchComboBox.getSelectedItem();
         Recipe dinnerRecipe = (Recipe) dinnerComboBox.getSelectedItem();
 
-        Meal breakfastMeal = matchMealToRecipe(breakfastRecipe, dayOfWeek);
-        Meal lunchMeal = matchMealToRecipe(lunchRecipe, dayOfWeek);
-        Meal dinnerMeal = matchMealToRecipe(dinnerRecipe, dayOfWeek);
+        Meal breakfastMeal = matchMealToRecipe(breakfastRecipe, dayOfWeek, Constants.BREAKFAST);
+        Meal lunchMeal = matchMealToRecipe(lunchRecipe, dayOfWeek, Constants.LUNCH);;
+        Meal dinnerMeal = matchMealToRecipe(dinnerRecipe, dayOfWeek, Constants.DINNER);
 
         RecipeMeal breakfastRecipeMeal = matchRecipeMeal(breakfastRecipe, breakfastMeal);
         RecipeMeal lunchRecipeMeal = matchRecipeMeal(lunchRecipe, lunchMeal);
@@ -403,7 +403,7 @@ public class WeeklyMealPanel extends javax.swing.JPanel {
         return null;
     }
     
-    private Meal matchMealToRecipe(Recipe recipe, String dayOfWeek) {
+    private Meal matchMealToRecipe(Recipe recipe, String dayOfWeek, String mealType) {
         Integer mealId = null;
         if(recipe != null) {
             for(RecipeMeal recipeMeal : recipeMeals) {
@@ -416,7 +416,8 @@ public class WeeklyMealPanel extends javax.swing.JPanel {
             if(mealId != null) {
                 for(Meal meal : meals) {
                     if(meal.getId().equals(mealId) 
-                            && meal.getDayOfWeek().equals(dayOfWeek)) {
+                            && meal.getDayOfWeek().equals(dayOfWeek)
+                            && meal.getMealType().equals(mealType)) {
                         return meal;
                     }
                 }
